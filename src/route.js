@@ -1,26 +1,45 @@
 const express = require("express");
 const routes = express.Router();
-const alunosController = require("./database/controllers/alunosController")
-const professoresController = require("./database/controllers/professoresController")
-const responsavelController = require("./database/controllers/responsavelController")
+const studentController = require("./database/controllers/studentController");
+const teacherController = require("./database/controllers/teacherController");
+const responsibleController = require("./database/controllers/responsibleController");
+const classController = require("./database/controllers/classController");
+const relationResponsibleController = require("./database/controllers/relationResponsibleController");
 
 // routes alunos
 routes
-.get("/alunos", alunosController.index)
-.post("/alunos", alunosController.create)
-.put("/alunos/:matricula", alunosController.update)
-.delete("/alunos/:matricula", alunosController.delete)
+  .get("/alunos", studentController.findAllStudent)
+  .post("/alunos", studentController.registerStudent)
+  .put("/alunos/:matricula", studentController.updateStudent)
+  .delete("/alunos/:matricula", studentController.deleteStudent)
 
-// routes professores
-.get("/Professores", professoresController.index)
-.post("/Professores", professoresController.create)
-.put("/Professores/:matricula", professoresController.update)
-.delete("/Professores/:matricula", professoresController.delete)
+  // routes professores
+  .get("/professores", teacherController.findAllTeacher)
+  .post("/professores", teacherController.registerTeacher)
+  .put("/professores/:matricula", teacherController.updateTeacher)
+  .delete("/professores/:matricula", teacherController.deleteTeacher)
 
-// routes responsavel
-.get("/responsavel", responsavelController.index)
-.post("/responsavel", responsavelController.create)
-.put("/responsavel/:cpf", responsavelController.update)
-.delete("/responsavel/:cpf", responsavelController.delete)
+  // routes responsavel
+  .get("/responsavel", responsibleController.findAllResponsible)
+  .post("/responsavel", responsibleController.registerResponsible)
+  .put("/responsavel/:cpf", responsibleController.updateResponsible)
+  .delete("/responsavel/:cpf", responsibleController.deleteResponsible)
+
+  // routes relacao_aula
+  .get("/relacaoaulaprofessor", teacherController.classTeacher)
+  .get("/relacaoaulaaluno", studentController.classStudent)
+  .post("/relacaoaula", classController.registerRelationClass)
+  .delete("/relacaoaula", classController.deleteRelationClass)
+
+  // routes responsavel_aluno
+  .get("/responsavelaluno", studentController.responsibleStudent)
+  .post(
+    "/responsavelaluno",
+    relationResponsibleController.registerRelationResponsible
+  )
+  .delete(
+    "/responsavelaluno",
+    relationResponsibleController.deleteRelationResponsible
+  );
 
 module.exports = routes;
